@@ -3,6 +3,7 @@
   */
 package com.geostar.wuhancitymsgboard.pojo;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -107,6 +108,10 @@ public class Threads {
 	@JsonProperty("logInfo")
 	private String loginfo;
 	private String preview;
+	@Column(columnDefinition="text")
+	private String detail;
+	@Column(columnDefinition="text")
+	private String picUrl;
 
 	public void setTid(int tid) {
 		this.tid = tid;
@@ -562,6 +567,22 @@ public class Threads {
 
 	public String getPreview() {
 		return preview;
+	}
+
+	public String getDetail() {
+		return detail;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+
+	public String getPicUrl() {
+		return picUrl;
+	}
+
+	public void setPicUrl(String picUrl) {
+		this.picUrl = picUrl;
 	}
 
 	@Override

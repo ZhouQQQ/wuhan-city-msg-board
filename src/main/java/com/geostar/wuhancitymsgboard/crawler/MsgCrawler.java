@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.geostar.wuhancitymsgboard.dao.AnswerRepository;
+import com.geostar.wuhancitymsgboard.dao.AreaRepository;
 import com.geostar.wuhancitymsgboard.dao.MsgRepository;
 import com.geostar.wuhancitymsgboard.pojo.MessageBoardResult;
 import com.geostar.wuhancitymsgboard.pojo.Newestanswer;
@@ -35,6 +36,12 @@ public class MsgCrawler {
 	private MsgRepository msgRepository;
 	
 	@Autowired
+	private AreaRepository areaRepository;
+	
+	@Autowired
+	private DetailCrawler detailCrawler;
+	
+	@Autowired
 	private AnswerRepository answerRepository;
 
 	private OkHttpClient okhttpclient = new OkHttpClient();
@@ -47,7 +54,7 @@ public class MsgCrawler {
 
 	public List<Responsedata> getAllMsg(int areaCode) {
 		List<Responsedata> allDataList = new ArrayList<Responsedata>();
-		logger.info("正在爬取[{}]数据",areaCode);
+		logger.info("正在爬取[{}]-[{}]数据",areaCode,areaRepository.findById(areaCode));
 		getMsg(allDataList, 0, areaCode);
 		return allDataList;
 	}
@@ -76,8 +83,10 @@ public class MsgCrawler {
 				if(answerItem!=null) {
 					answerRepository.save(answerItem);
 				}
-				logger.info("获取到[{}]{}", responsedata.getThreads().getTid(), responsedata.getThreads().getSubject());
+				detailCrawler.crawlerDetail(responsedata.getThreads().getTid(),answerItem!=null);
+				//logger.info("获取到[{}]{}", responsedata.getThreads().getTid(), responsedata.getThreads().getSubject());
 			}
+			
 			resDataList.addAll(mbr.getResponsedata());
 			lastTid = mbr.getResponsedata().get(mbr.getResponsedata().size() - 1).getThreads().getTid();
 			getMsg(resDataList, lastTid, areaCode);
