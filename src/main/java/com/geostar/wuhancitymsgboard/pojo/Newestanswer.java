@@ -1,14 +1,11 @@
-/**
-  * Copyright 2018 aTool.org 
-  */
 package com.geostar.wuhancitymsgboard.pojo;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-@Entity()
-
+@Entity
 public class Newestanswer {
 
 	@Id
@@ -55,6 +52,8 @@ public class Newestanswer {
     private String groupname;
     @JsonProperty("attachmentList")
     private String attachmentlist;
+    @Column(columnDefinition="text")
+	private String detail;
     public void setAsid(int asid) {
          this.asid = asid;
      }
@@ -264,5 +263,11 @@ public class Newestanswer {
      public String getAttachmentlist() {
          return attachmentlist;
      }
+	public String getDetail() {
+		return detail;
+	}
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
 
 }
